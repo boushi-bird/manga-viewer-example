@@ -1,4 +1,6 @@
-build:
+build: build-js build-css
+
+build-js:
 	deno bundle ./src/index.ts ./docs/index.js
 
 watch:
@@ -14,7 +16,10 @@ server:
 		docs
 
 build-css:
-	sass ./src/index.scss ./docs/index.css
+	sass --no-source-map ./src/index.scss ./docs/index.css
 
 watch-css:
-	sass -w ./src/index.scss ./docs/index.css
+	sass --no-source-map -w ./src/index.scss ./docs/index.css
+
+clean:
+	rm -f ./docs/index.js ./docs/index.css
