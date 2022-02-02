@@ -45,6 +45,7 @@
 
       .viewer-page {
         scroll-snap-align: end;
+        scroll-snap-stop: always;
         margin: 0 10px;
 
         canvas {
