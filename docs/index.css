@@ -26,6 +26,10 @@
   display: flex;
   align-items: stretch;
   flex-direction: column;
+  scrollbar-width: none;
+}
+.manga-viewer .viewer-page-contents::-webkit-scrollbar {
+  display: none;
 }
 .manga-viewer .viewer-page-contents .viewer-page canvas {
   aspect-ratio: var(--page-aspect-ratio);
@@ -60,11 +64,4 @@
     scroll-snap-align: none;
     margin-right: 0;
   }
-}
-
-.scroll-hidden {
-  scrollbar-width: none;
-}
-.scroll-hidden::-webkit-scrollbar {
-  display: none;
 }

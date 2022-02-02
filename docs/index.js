@@ -177,7 +177,6 @@ class MangaViewer {
         viewerMain.classList.add("viewer-main");
         const pageContents = viewerMain.appendChild(document.createElement("div"));
         pageContents.classList.add("viewer-page-contents");
-        pageContents.classList.add("scroll-hidden");
         return [
             viewer,
             pageContents
