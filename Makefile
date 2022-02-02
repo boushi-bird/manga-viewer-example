@@ -16,10 +16,10 @@ server:
 		docs
 
 build-css:
-	sass --no-source-map ./src/index.scss ./docs/index.css
+	sass --no-source-map ./src/manga-viewer/index.scss ./docs/index.css
 
 watch-css:
-	sass --no-source-map -w ./src/index.scss ./docs/index.css
+	sass --no-source-map -w ./src/manga-viewer/index.scss ./docs/index.css
 
 clean:
 	rm -f ./docs/index.js ./docs/index.css
