@@ -40,6 +40,7 @@
 }
 .manga-viewer.horizontal-viewer .viewer-page-contents .viewer-page {
   scroll-snap-align: end;
+  scroll-snap-stop: always;
   margin: 0 10px;
 }
 .manga-viewer.horizontal-viewer .viewer-page-contents .viewer-page canvas {
