@@ -35,6 +35,7 @@ class ViewerPage {
     }
     createCanvas(width, height) {
         const c = document.createElement("canvas");
+        c.classList.add("content");
         c.setAttribute("width", `${width}`);
         c.setAttribute("height", `${height}`);
         return c;
@@ -86,8 +87,10 @@ class MangaViewer {
     #currentIndex = 0;
     #currentIndexChangedHandlers = [];
     constructor({ pageImages , mode  }){
-        [this.#selfElement, this.#pageContents] = this.createElements(mode);
-        this.#viewerPages = this.createPages(this.#pageContents, pageImages);
+        const [selfElement, pageContents] = this.createElements(mode);
+        this.#selfElement = selfElement;
+        this.#pageContents = pageContents;
+        this.#viewerPages = this.createPages(pageContents, pageImages);
         this.setupCurrentIndexChange();
         for (const page of this.#viewerPages){
             page.loadImage();

@@ -1,6 +1,7 @@
 :root {
   --page-aspect-ratio: 2/3;
   --page-wide-aspect-ratio: 4/3;
+  --page-max-height: 792px;
 }
 
 .manga-viewer {
@@ -10,7 +11,7 @@
   margin: 0;
   padding: 0;
   height: 100%;
-  max-height: 792px;
+  max-height: var(--page-max-height);
 }
 .manga-viewer *, .manga-viewer ::before, .manga-viewer ::after {
   box-sizing: border-box;
@@ -20,6 +21,7 @@
 .manga-viewer .viewer-main {
   display: flex;
   justify-content: center;
+  max-height: var(--page-max-height);
 }
 .manga-viewer .viewer-page-contents {
   scroll-behavior: smooth;
@@ -31,13 +33,14 @@
 .manga-viewer .viewer-page-contents::-webkit-scrollbar {
   display: none;
 }
-.manga-viewer .viewer-page-contents .viewer-page canvas {
+.manga-viewer .viewer-page-contents .viewer-page .content {
   aspect-ratio: var(--page-aspect-ratio);
 }
 .manga-viewer.horizontal-viewer .viewer-page-contents {
   aspect-ratio: var(--page-aspect-ratio);
   max-width: 100vw;
-  max-height: 100%;
+  width: 100vw;
+  height: 100%;
   flex-direction: row-reverse;
   overflow-x: scroll;
   scroll-snap-type: x mandatory;
@@ -47,7 +50,7 @@
   scroll-snap-stop: always;
   margin: 0 10px;
 }
-.manga-viewer.horizontal-viewer .viewer-page-contents .viewer-page canvas {
+.manga-viewer.horizontal-viewer .viewer-page-contents .viewer-page .content {
   height: 100%;
 }
 @media (min-width: 640px) and (orientation: landscape) {
@@ -56,6 +59,7 @@
   }
   .manga-viewer.horizontal-viewer .viewer-page-contents {
     aspect-ratio: var(--page-wide-aspect-ratio);
+    width: auto;
   }
   .manga-viewer.horizontal-viewer .viewer-page-contents .viewer-page:nth-child(odd) {
     margin-left: 0;
