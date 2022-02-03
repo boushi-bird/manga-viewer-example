@@ -14,8 +14,10 @@ export class MangaViewer {
   #currentIndexChangedHandlers: ((index: number) => void)[] = [];
 
   constructor({ pageImages, mode }: MangaViewerArgs) {
-    [this.#selfElement, this.#pageContents] = this.createElements(mode);
-    this.#viewerPages = this.createPages(this.#pageContents, pageImages);
+    const [selfElement, pageContents] = this.createElements(mode);
+    this.#selfElement = selfElement;
+    this.#pageContents = pageContents;
+    this.#viewerPages = this.createPages(pageContents, pageImages);
 
     this.setupCurrentIndexChange();
 
