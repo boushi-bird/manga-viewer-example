@@ -34,7 +34,7 @@
       display: none;
     }
 
-    .viewer-page canvas {
+    .viewer-page .content {
       aspect-ratio: var(--page-aspect-ratio);
     }
   }
@@ -54,7 +54,7 @@
         scroll-snap-stop: always;
         margin: 0 10px;
 
-        canvas {
+        .content {
           height: 100%;
         }
       }

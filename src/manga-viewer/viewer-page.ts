@@ -30,6 +30,7 @@ export class ViewerPage {
 
   private createCanvas(width: number, height: number): HTMLCanvasElement {
     const c = document.createElement("canvas");
+    c.classList.add("content");
     c.setAttribute("width", `${width}`);
     c.setAttribute("height", `${height}`);
 
