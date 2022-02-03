@@ -5,4 +5,6 @@ services:
     build: .
     volumes:
       - ./:/usr/src/app
+    ports:
+      - "8080:8080"
     command: tail -f /dev/null
