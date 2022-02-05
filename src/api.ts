@@ -1,6 +1,6 @@
 import type { PageImage } from "./manga-viewer/@types/index.d.ts";
 
-export async function fetchData(): Promise<PageImage[]> {
+export async function fetchData(): Promise<(PageImage | string)[]> {
   const res = await fetch("./data.json");
   if (!res.ok) {
     console.error("api error!");
@@ -12,5 +12,5 @@ export async function fetchData(): Promise<PageImage[]> {
 }
 
 interface ApiData {
-  page_images: PageImage[];
+  page_images: (PageImage | string)[];
 }

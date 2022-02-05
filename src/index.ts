@@ -2,11 +2,11 @@ import { fetchData } from "./api.ts";
 import { MangaViewer } from "./manga-viewer/index.ts";
 
 globalThis.addEventListener("DOMContentLoaded", async (_) => {
-  console.debug('DOMContentLoaded');
+  console.debug("DOMContentLoaded");
 
   const embed = document.getElementById("embed");
   if (!embed) {
-    console.error("element not found")
+    console.error("element not found");
     return;
   }
 
@@ -68,4 +68,4 @@ globalThis.addEventListener("DOMContentLoaded", async (_) => {
     document.body.append(btn);
   }
 });
-console.debug('run');
+console.debug("run");

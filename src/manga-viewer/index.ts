@@ -80,7 +80,7 @@ export class MangaViewer {
     const currentIndexes = new Set<number>();
     const observer = new IntersectionObserver((entries) => {
       for (const entry of entries) {
-        const page = this.#viewerPages.find(p => p.element === entry.target);
+        const page = this.#viewerPages.find((p) => p.element === entry.target);
         if (!page) {
           continue;
         }
@@ -102,7 +102,7 @@ export class MangaViewer {
     }, {
       root: this.#pageContents,
       threshold: 0,
-    })
+    });
     for (const page of this.#viewerPages) {
       observer.observe(page.element);
     }
@@ -123,9 +123,17 @@ export class MangaViewer {
     return [viewer, pageContents];
   }
 
-  private createPages(pageContents: HTMLElement, pageImages: PageImage[]): ViewerPage[] {
+  private createPages(
+    pageContents: HTMLElement,
+    pageImages: (PageImage | string)[],
+  ): ViewerPage[] {
     return pageImages.map((image, index) => {
-      const p = new ViewerPage({ width: PAGE_WIDTH, height: PAGE_HEIGHT, index, image });
+      const p = new ViewerPage({
+        width: PAGE_WIDTH,
+        height: PAGE_HEIGHT,
+        index,
+        image,
+      });
       pageContents.appendChild(p.element);
       return p;
     });
@@ -136,7 +144,7 @@ type MangaViewerMode = "horizontal";
 
 interface MangaViewerArgs {
   /** ページ画像情報 */
-  pageImages: PageImage[];
+  pageImages: (PageImage | string)[];
   /** ビューワーモード */
   mode: MangaViewerMode;
 }
