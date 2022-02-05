@@ -51,7 +51,7 @@ class ViewerPage {
         }
         this.#imageLoaded = true;
         const img = new Image();
-        img.src = this.#args.image.url;
+        img.src = typeof this.#args.image === "string" ? this.#args.image : this.#args.image.url;
         return new Promise((resolve, reject)=>{
             img.onload = ()=>{
                 this.drawPageImage(ctx, img);
@@ -61,8 +61,12 @@ class ViewerPage {
         });
     }
     drawPageImage(ctx, img) {
-        const data = this.#args.image;
-        const { width , height  } = this.#args;
+        const { width , height , image  } = this.#args;
+        const data = typeof image === "string" ? {
+            w: img.width,
+            h: img.height,
+            pieces: undefined
+        } : image;
         const pageRatio = width / height;
         const imageRatio = data.w / data.h;
         const dw = pageRatio > imageRatio ? imageRatio * height : width;
@@ -199,7 +203,7 @@ class MangaViewer {
     }
 }
 globalThis.addEventListener("DOMContentLoaded", async (_)=>{
-    console.debug('DOMContentLoaded');
+    console.debug("DOMContentLoaded");
     const embed = document.getElementById("embed");
     if (!embed) {
         console.error("element not found");
@@ -252,4 +256,4 @@ globalThis.addEventListener("DOMContentLoaded", async (_)=>{
         document.body.append(btn);
     }
 });
-console.debug('run');
+console.debug("run");
