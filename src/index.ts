@@ -1,5 +1,5 @@
-import { fetchData } from "./api.ts";
-import { MangaViewer } from "./manga-viewer/index.ts";
+import { fetchData } from "./api";
+import { MangaViewer } from "./manga-viewer/index";
 
 globalThis.addEventListener("DOMContentLoaded", async (_) => {
   console.debug("DOMContentLoaded");

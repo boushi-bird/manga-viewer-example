@@ -1,4 +1,5 @@
-import { ViewerPage } from "./viewer-page.ts";
+import { ViewerPage } from "./viewer-page";
+import type { PageImage } from "./@types/index";
 
 // アスペクト比が変わる値変更場合、cssのアスペクト比も変更が必要
 /** ページ表示幅 */

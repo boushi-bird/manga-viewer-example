@@ -1,4 +1,4 @@
-interface PageImage {
+export interface PageImage {
   /** ページ画像全体幅 */
   w: number;
   /** ページ画像全体高さ */

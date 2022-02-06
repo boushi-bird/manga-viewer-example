@@ -1,9 +1,0 @@
-{
-  "compilerOptions": {
-    "lib": [
-      "deno.window"
-    ]
-  },
-  "lint": {},
-  "format": {}
-}

@@ -1,4 +1,4 @@
-import type { PageImage } from "./manga-viewer/@types/index.d.ts";
+import type { PageImage } from "./manga-viewer/@types/index";
 
 export async function fetchData(): Promise<(PageImage | string)[]> {
   const res = await fetch("./data.json");

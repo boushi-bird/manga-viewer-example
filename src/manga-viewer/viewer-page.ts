@@ -1,3 +1,5 @@
+import type { PageImage } from "./@types/index";
+
 export class ViewerPage {
   #imageLoaded = false;
   #args: ViewerPageArgs;
