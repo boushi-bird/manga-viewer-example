@@ -14,7 +14,7 @@ jobs:
       - name: Checkout dist
         uses: actions/checkout@v2
         with:
-          refs: ph-pages
+          refs: gh-pages
           path: dist
       - name: Build
         run: |
