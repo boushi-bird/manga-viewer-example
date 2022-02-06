@@ -12,7 +12,8 @@ window.addEventListener("DOMContentLoaded", async () => {
 
   const mangaViewer = new MangaViewer({
     pageImages,
-    mode: "horizontal",
+    // mode: "horizontal-ltr",
+    mode: "horizontal-rtl",
   });
   embed.appendChild(mangaViewer.element);
 

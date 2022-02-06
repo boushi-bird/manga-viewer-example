@@ -12,15 +12,23 @@ type CurrentIndexChangeHandler = (index: number) => void;
 export class MangaViewer {
   #selfElement: HTMLElement;
   #pageContents: HTMLElement;
+  #pageSelector: HTMLInputElement;
   #viewerPages: ViewerPage[] = [];
+  #mode: MangaViewerMode;
   #currentIndex = 0;
+  #pendingCurrentIndex: number | undefined = undefined;
   #currentIndexChangedHandlers: CurrentIndexChangeHandler[] = [];
+  #pageScrolling = false;
 
   constructor({ pageImages, mode }: MangaViewerArgs) {
-    const [selfElement, pageContents] = this.createElements(mode);
-    this.#selfElement = selfElement;
+    this.#mode = mode;
+    const { viewer, pageContents, pageSelector } = this.createElements(mode);
+    this.#selfElement = viewer;
     this.#pageContents = pageContents;
+    this.#pageSelector = pageSelector;
     this.#viewerPages = this.createPages(pageContents, pageImages);
+
+    pageSelector.setAttribute("max", `${this.#viewerPages.length - 1}`);
 
     this.setupCurrentIndexChange();
 
@@ -51,10 +59,18 @@ export class MangaViewer {
   }
 
   next() {
-    this.#pageContents.scrollBy({ left: -1 });
+    this.#mode === "horizontal-rtl" ? this.right() : this.left();
   }
 
   prev() {
+    this.#mode === "horizontal-rtl" ? this.left() : this.right();
+  }
+
+  right() {
+    this.#pageContents.scrollBy({ left: -1 });
+  }
+
+  left() {
     this.#pageContents.scrollBy({ left: 1 });
   }
 
@@ -74,9 +90,17 @@ export class MangaViewer {
 
   private emitCurrentIndexChanged(index: number) {
     this.#currentIndex = index;
+    this.#pageSelector.value = `${index}`;
     for (const handler of this.#currentIndexChangedHandlers) {
       handler(index);
     }
+  }
+
+  private pendEmitCurrentIndexChanged(index: number) {
+    if (!this.#pageScrolling) {
+      this.emitCurrentIndexChanged(index);
+    }
+    this.#pendingCurrentIndex = index;
   }
 
   private setupCurrentIndexChange() {
@@ -104,7 +128,7 @@ export class MangaViewer {
         if (currentIndex === this.#currentIndex) {
           return;
         }
-        this.emitCurrentIndexChanged(currentIndex);
+        this.pendEmitCurrentIndexChanged(currentIndex);
       },
       {
         root: this.#pageContents,
@@ -117,10 +141,13 @@ export class MangaViewer {
     this.emitCurrentIndexChanged(0);
   }
 
-  private createElements(mode: MangaViewerMode): [HTMLElement, HTMLElement] {
+  private createElements(mode: MangaViewerMode): {
+    viewer: HTMLElement;
+    pageContents: HTMLElement;
+    pageSelector: HTMLInputElement;
+  } {
     const viewer = document.createElement("section");
     viewer.classList.add("manga-viewer");
-    viewer.classList.add(`${mode}-viewer`);
 
     const viewerMain = viewer.appendChild(document.createElement("div"));
     viewerMain.classList.add("viewer-main");
@@ -128,14 +155,50 @@ export class MangaViewer {
     const pageContents = viewerMain.appendChild(document.createElement("div"));
     pageContents.classList.add("viewer-page-contents");
 
-    return [viewer, pageContents];
+    if (mode.startsWith("horizontal-")) {
+      viewer.classList.add("horizontal-viewer");
+      viewer.classList.add(
+        mode === "horizontal-rtl" ? "rtl-contents" : "ltr-contents"
+      );
+    } else {
+      viewer.classList.add(`${mode}-viewer`);
+    }
+
+    const pageSelector = document.createElement("input");
+    viewerMain.appendChild(pageSelector);
+    pageSelector.classList.add("page-selector");
+    pageSelector.setAttribute("type", "range");
+    pageSelector.setAttribute("min", "0");
+    pageSelector.setAttribute("max", "0");
+    pageSelector.setAttribute("value", "0");
+    pageSelector.setAttribute("step", "1");
+    pageSelector.addEventListener("change", () => {
+      const index = Math.round(parseFloat(pageSelector.value));
+      this.currentIndex = index;
+    });
+
+    let scrolling: number | undefined = undefined;
+    pageContents.addEventListener("scroll", () => {
+      clearTimeout(scrolling);
+      this.#pageScrolling = true;
+      scrolling = window.setTimeout(() => {
+        const pendingCurrentIndex = this.#pendingCurrentIndex;
+        this.#pageScrolling = false;
+        this.#pendingCurrentIndex = undefined;
+        if (pendingCurrentIndex != null) {
+          this.emitCurrentIndexChanged(pendingCurrentIndex);
+        }
+      }, 100);
+    });
+
+    return { viewer, pageContents, pageSelector };
   }
 
   private createPages(
     pageContents: HTMLElement,
     pageImages: (PageImage | string)[]
   ): ViewerPage[] {
-    return pageImages.map((image, index) => {
+    const viewPages = pageImages.map((image, index) => {
       const p = new ViewerPage({
         width: PAGE_WIDTH,
         height: PAGE_HEIGHT,
@@ -145,10 +208,15 @@ export class MangaViewer {
       pageContents.appendChild(p.element);
       return p;
     });
+    const emptyPage = document.createElement("p");
+    emptyPage.classList.add("empty-page");
+    pageContents.appendChild(emptyPage);
+
+    return viewPages;
   }
 }
 
-type MangaViewerMode = "horizontal";
+type MangaViewerMode = "horizontal-ltr" | "horizontal-rtl";
 
 interface MangaViewerArgs {
   /** ページ画像情報 */
