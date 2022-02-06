@@ -1,7 +1,7 @@
 import { fetchData } from "./api";
 import { MangaViewer } from "./manga-viewer/index";
 
-globalThis.addEventListener("DOMContentLoaded", async (_) => {
+window.addEventListener("DOMContentLoaded", async () => {
   console.debug("DOMContentLoaded");
 
   const embed = document.getElementById("embed");

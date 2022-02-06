@@ -7,12 +7,14 @@ const PAGE_WIDTH = 800;
 /** ページ表示高さ */
 const PAGE_HEIGHT = 1200;
 
+type CurrentIndexChangeHandler = (index: number) => void;
+
 export class MangaViewer {
   #selfElement: HTMLElement;
   #pageContents: HTMLElement;
   #viewerPages: ViewerPage[] = [];
   #currentIndex = 0;
-  #currentIndexChangedHandlers: ((index: number) => void)[] = [];
+  #currentIndexChangedHandlers: CurrentIndexChangeHandler[] = [];
 
   constructor({ pageImages, mode }: MangaViewerArgs) {
     const [selfElement, pageContents] = this.createElements(mode);
@@ -66,7 +68,7 @@ export class MangaViewer {
     }
   }
 
-  onCurrentIndexChanged(handler: (index: number) => void) {
+  onCurrentIndexChanged(handler: CurrentIndexChangeHandler) {
     this.#currentIndexChangedHandlers.push(handler);
   }
 
@@ -79,31 +81,36 @@ export class MangaViewer {
 
   private setupCurrentIndexChange() {
     const currentIndexes = new Set<number>();
-    const observer = new IntersectionObserver((entries) => {
-      for (const entry of entries) {
-        const page = this.#viewerPages.find((p) => p.element === entry.target);
-        if (!page) {
-          continue;
+    const observer = new IntersectionObserver(
+      (entries) => {
+        for (const entry of entries) {
+          const page = this.#viewerPages.find(
+            (p) => p.element === entry.target
+          );
+          if (!page) {
+            continue;
+          }
+          if (entry.isIntersecting) {
+            currentIndexes.add(page.index);
+          } else {
+            currentIndexes.delete(page.index);
+          }
         }
-        if (entry.isIntersecting) {
-          currentIndexes.add(page.index);
-        } else {
-          currentIndexes.delete(page.index);
-        }
-      }
 
-      if (currentIndexes.size === 0) {
-        return;
+        if (currentIndexes.size === 0) {
+          return;
+        }
+        const currentIndex = Math.min(...currentIndexes);
+        if (currentIndex === this.#currentIndex) {
+          return;
+        }
+        this.emitCurrentIndexChanged(currentIndex);
+      },
+      {
+        root: this.#pageContents,
+        threshold: 0,
       }
-      const currentIndex = Math.min(...currentIndexes);
-      if (currentIndex === this.#currentIndex) {
-        return;
-      }
-      this.emitCurrentIndexChanged(currentIndex);
-    }, {
-      root: this.#pageContents,
-      threshold: 0,
-    });
+    );
     for (const page of this.#viewerPages) {
       observer.observe(page.element);
     }
@@ -126,7 +133,7 @@ export class MangaViewer {
 
   private createPages(
     pageContents: HTMLElement,
-    pageImages: (PageImage | string)[],
+    pageImages: (PageImage | string)[]
   ): ViewerPage[] {
     return pageImages.map((image, index) => {
       const p = new ViewerPage({

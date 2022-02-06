@@ -52,9 +52,10 @@ export class ViewerPage {
     this.#imageLoaded = true;
 
     const img = new Image();
-    img.src = typeof this.#args.image === "string"
-      ? this.#args.image
-      : this.#args.image.url;
+    img.src =
+      typeof this.#args.image === "string"
+        ? this.#args.image
+        : this.#args.image.url;
     return new Promise((resolve, reject) => {
       img.onload = () => {
         this.drawPageImage(ctx, img);
@@ -66,13 +67,14 @@ export class ViewerPage {
 
   private drawPageImage(ctx: CanvasRenderingContext2D, img: HTMLImageElement) {
     const { width, height, image } = this.#args;
-    const data = typeof image === "string"
-      ? {
-        w: img.width,
-        h: img.height,
-        pieces: undefined,
-      }
-      : image;
+    const data =
+      typeof image === "string"
+        ? {
+            w: img.width,
+            h: img.height,
+            pieces: undefined,
+          }
+        : image;
 
     const pageRatio = width / height;
     const imageRatio = data.w / data.h;
@@ -98,7 +100,7 @@ export class ViewerPage {
           dx + piece.dx * rw,
           dy + piece.dy * rh,
           piece.w * rw,
-          piece.h * rh,
+          piece.h * rh
         );
       }
     } else {
