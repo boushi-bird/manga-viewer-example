@@ -40,11 +40,11 @@ window.addEventListener("DOMContentLoaded", async () => {
   document.body.appendChild(pageSelect);
 
   document.getElementById("simple-next")?.addEventListener("click", () => {
-    mangaViewer.next();
+    mangaViewer.left();
   });
 
   document.getElementById("simple-prev")?.addEventListener("click", () => {
-    mangaViewer.prev();
+    mangaViewer.right();
   });
 
   const observer = new ResizeObserver((entries) => {

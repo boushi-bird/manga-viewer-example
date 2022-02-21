@@ -2,6 +2,7 @@
   --page-aspect-ratio: 2/3;
   --page-wide-aspect-ratio: 4/3;
   --page-max-height: 792px;
+  --page-margin: 20px;
 }
 
 .manga-viewer {
@@ -22,10 +23,12 @@
   }
 
   .viewer-main {
+    aspect-ratio: var(--page-wide-aspect-ratio);
     position: relative;
     display: flex;
     justify-content: center;
     max-height: var(--page-max-height);
+    height: 100%;
   }
 
   .page-selector {
@@ -48,7 +51,13 @@
       display: none;
     }
 
+    .viewer-page {
+      position: relative;
+      aspect-ratio: var(--page-aspect-ratio);
+    }
+
     .viewer-page .content {
+      position: absolute;
       aspect-ratio: var(--page-aspect-ratio);
     }
 
@@ -70,7 +79,8 @@
       .viewer-page {
         scroll-snap-align: end;
         scroll-snap-stop: always;
-        margin: 0 10px;
+        margin: 0 var(--page-margin);
+        height: 100%;
 
         .content {
           height: 100%;
@@ -78,7 +88,8 @@
       }
 
       .empty-page {
-        margin: 0 10px;
+        margin: 0 var(--page-margin);
+        height: 100%;
       }
     }
 
@@ -106,29 +117,25 @@
         width: auto;
 
         .viewer-page:nth-child(odd) {
-          margin-right: 10px;
+          margin-right: var(--page-margin);
           margin-left: 0;
         }
 
         .viewer-page:nth-child(even) {
           scroll-snap-align: none;
           margin-right: 0;
-          margin-left: 10px;
-        }
-
-        .empty-page {
-          margin: 0 5px;
+          margin-left: var(--page-margin);
         }
       }
 
       &.ltr-contents {
         .viewer-page:nth-child(odd) {
           margin-right: 0;
-          margin-left: 10px;
+          margin-left: var(--page-margin);
         }
 
         .viewer-page:nth-child(even) {
-          margin-right: 10px;
+          margin-right: var(--page-margin);
           margin-left: 0;
         }
       }
